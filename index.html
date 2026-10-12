@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>婚禮邀請函與出席回覆 | Wedding Invitation & RSVP</title>
+    <!-- Open Graph 分享預覽標籤 (LINE / 微信 / FB) -->
+    <meta property="og:title" content="婚禮邀請函與出席回覆 | Wedding Invitation & RSVP">
+    <meta property="og:description" content="誠摯邀請您參加我們的婚禮，請點擊連結填寫出席回覆。">
+    <meta property="og:type" content="website">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        champagne: {
+                            50: '#FAF8F5',
+                            100: '#F5EFE6',
+                            200: '#E8DCCB',
+                            300: '#DBC7AF',
+                            400: '#C7AC8B',
+                            500: '#B5946A',
+                            600: '#9B784E',
+                        },
+                        rosegold: {
+                            500: '#C07D83',
+                        },
+                        cream: '#FDFAF6',
+                        darkburgundy: '#2C1820'
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif TC"', 'serif'],
+                        cursive: ['"Cormorant Garamond"', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background-color: #FDFAF6;
+            color: #2C1820;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(219, 199, 175, 0.5);
+            box-shadow: 0 20px 40px rgba(181, 148, 106, 0.08);
+        }
+
+        .custom-input {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid #E8DCCB;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: #2C1820;
+            transition: all 0.3s ease;
+        }
+
+        .custom-input:focus {
+            outline: none;
+            border-color: #B5946A;
+            box-shadow: 0 0 0 3px rgba(181, 148, 106, 0.15);
+        }
+
+        /* 精簡底線數值輸入框風格 */
+        .line-number-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid #DBC7AF;
+            border-radius: 0;
+            padding: 0.5rem 0.25rem;
+            color: #2C1820;
+            font-size: 1.125rem;
+            transition: all 0.3s ease;
+        }
+
+        .line-number-input:focus {
+            outline: none;
+            border-bottom-color: #B5946A;
+        }
+
+        /* 倒數計時數字卡片樣式 */
+        .countdown-box {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid #E8DCCB;
+            border-radius: 1rem;
+            padding: 0.75rem 0.5rem;
+            min-width: 65px;
+            box-shadow: 0 4px 12px rgba(181, 148, 106, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <!-- 隱藏式 Iframe，用於接收 Google Form 提交結果 -->
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="handleIframeLoad()"></iframe>
+
+    <!-- 1. 頂部高清喜帖圖示區域 (若尚未替換圖片，預設載入 Canva 高清容器) -->
+    <section class="w-full relative max-w-2xl mx-auto px-4 pt-4">
+        <div class="glass-card rounded-3xl overflow-hidden p-2 border border-champagne-200">
+            <!-- 喜帖圖片 (可將 src 替換為您的高清 PNG 圖檔，例如 wedding_invitation.png) -->
+            <img id="weddingCardImg" 
+                 src="https://www.canva.com/design/DAHWBKwxk5o/NzhCkC-29eXAi5pwUNmehg/view?embed" 
+                 alt="Wedding Invitation" 
+                 class="w-full h-auto rounded-2xl hidden" 
+                 onload="this.classList.remove('hidden')">
+                 
+            <!-- 備用 Canva 高清內嵌容器 (圖片未載入時自動預備) -->
+            <div id="canvaFallback" class="relative w-full aspect-[3/4] bg-champagne-50 rounded-2xl overflow-hidden">
+                <iframe loading="lazy"
+                    src="https://www.canva.com/design/DAHWBKwxk5o/NzhCkC-29eXAi5pwUNmehg/view?embed" 
+                    class="w-full h-full border-none"
+                    allowfullscreen="allowfullscreen">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. 動態倒數計時組件 (Wedding Countdown) -->
+    <section class="w-full max-w-2xl mx-auto px-4 my-8">
+        <div class="glass-card p-6 rounded-3xl text-center border border-champagne-200">
+            <span class="font-cursive text-sm tracking-widest text-champagne-500 uppercase block mb-1">Save The Date</span>
+            <h3 class="text-xl font-normal tracking-widest text-darkburgundy mb-4">婚禮倒數計時</h3>
+            
+            <div class="flex justify-center items-center space-x-3 sm:space-x-4 text-center">
+                <div class="countdown-box">
+                    <span id="cd-days" class="font-cursive text-2xl sm:text-3xl font-bold text-champagne-600">00</span>
+                    <span class="block text-[10px] text-stone-500 uppercase tracking-wider mt-1">Days</span>
+                </div>
+                <span class="text-champagne-400 font-serif text-lg">:</span>
+                <div class="countdown-box">
+                    <span id="cd-hours" class="font-cursive text-2xl sm:text-3xl font-bold text-champagne-600">00</span>
+                    <span class="block text-[10px] text-stone-500 uppercase tracking-wider mt-1">Hours</span>
+                </div>
+                <span class="text-champagne-400 font-serif text-lg">:</span>
+                <div class="countdown-box">
+                    <span id="cd-minutes" class="font-cursive text-2xl sm:text-3xl font-bold text-champagne-600">00</span>
+                    <span class="block text-[10px] text-stone-500 uppercase tracking-wider mt-1">Mins</span>
+                </div>
+                <span class="text-champagne-400 font-serif text-lg">:</span>
+                <div class="countdown-box">
+                    <span id="cd-seconds" class="font-cursive text-2xl sm:text-3xl font-bold text-champagne-600">00</span>
+                    <span class="block text-[10px] text-stone-500 uppercase tracking-wider mt-1">Secs</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 宴客地點與 Google 地圖導航 (Location & Google Maps) -->
+    <section class="w-full max-w-2xl mx-auto px-4 mb-8">
+        <div class="glass-card p-6 rounded-3xl border border-champagne-200 text-center">
+            <span class="font-cursive text-sm tracking-widest text-champagne-500 uppercase block mb-1">Location</span>
+            <h3 class="text-xl font-normal tracking-widest text-darkburgundy mb-2">婚宴地點與導航</h3>
+            <p class="text-sm text-stone-600 mb-1 font-medium">宴會場地 / 飯店名稱</p>
+            <p class="text-xs text-stone-500 mb-4 font-light">地址：請於此處貼上您的婚宴地址</p>
+
+            <!-- 原生 Google 地圖嵌入 (無損超清晰) -->
+            <div class="w-full h-52 rounded-2xl overflow-hidden shadow-inner border border-champagne-200 mb-4">
+                <iframe 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0" 
+                    loading="lazy" 
+                    allowfullscreen 
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3652.1221!2d120.53!3d23.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDQyJzAwLjAiTiAxMjDCsDMxJzAwLjAiRQ!5e0!3m2!1szh-TW!2stw!4v1600000000000">
+                </iframe>
+            </div>
+
+            <!-- 一鍵開啟手機導航按鈕 -->
+            <div class="flex flex-col sm:flex-row justify-center gap-3">
+                <a href="https://maps.google.com/" target="_blank" class="inline-flex items-center justify-center space-x-2 px-5 py-2.5 bg-champagne-500 hover:bg-champagne-600 text-white rounded-full text-xs font-medium tracking-widest shadow transition-all">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>開啟 Google Maps 導航</span>
+                </a>
+                <a href="https://maps.apple.com/" target="_blank" class="inline-flex items-center justify-center space-x-2 px-5 py-2.5 bg-stone-700 hover:bg-stone-800 text-white rounded-full text-xs font-medium tracking-widest shadow transition-all">
+                    <i class="fa-solid fa-map-pin"></i>
+                    <span>開啟 Apple Maps 導航</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 中間引導按鈕 -->
+    <div class="text-center mb-8">
+        <a href="#rsvp-form-section" class="inline-flex items-center space-x-2 text-champagne-600 hover:text-champagne-700 bg-champagne-100/80 px-6 py-2.5 rounded-full text-sm font-medium tracking-widest shadow-sm hover:shadow transition-all">
+            <span>前往填寫出席回覆</span>
+            <i class="fa-solid fa-arrow-down animate-bounce text-xs"></i>
+        </a>
+    </div>
+
+    <!-- 5. RSVP 婚禮出席回覆表單 -->
+    <main class="w-full max-w-3xl mx-auto px-4">
+        <section id="rsvp-form-section" class="glass-card p-6 md:p-10 rounded-3xl shadow-xl border border-champagne-200">
+            <div class="text-center mb-8">
+                <span class="font-cursive text-sm tracking-widest text-champagne-500 uppercase block mb-1">RSVP Form</span>
+                <h2 class="text-2xl md:text-3xl font-normal tracking-widest text-darkburgundy">婚禮出席回覆</h2>
+                <p class="text-stone-500 text-xs md:text-sm mt-2 font-light">請填寫以下資訊，以便我們為您安排最佳席位</p>
+                <div class="w-12 h-0.5 bg-champagne-300 mx-auto mt-3"></div>
+            </div>
+
+            <form id="weddingRsvpForm" 
+                  action="https://docs.google.com/forms/d/e/1FAIpQLSdCKzax5qT-YAVwHjna2Vz3C011ReDAzNSA912Nu1fSOMnK2A/formResponse" 
+                  method="POST" 
+                  target="hidden_iframe" 
+                  onsubmit="handleFormSubmit(event)"
+                  class="space-y-6">
+
+                <!-- 1. 姓名 -->
+                <div>
+                    <label class="block text-sm font-medium text-darkburgundy mb-2">
+                        姓名 <span class="text-rosegold-500">*</span>
+                    </label>
+                    <input type="text" 
+                           id="entry_71470779"
+                           name="entry.71470779" 
+                           required 
+                           placeholder="請輸入您的真實姓名" 
+                           class="custom-input">
+                </div>
+
+                <!-- 2. 出席意願 -->
+                <div>
+                    <label class="block text-sm font-medium text-darkburgundy mb-2">
+                        出席意願 <span class="text-rosegold-500">*</span>
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
+                            <input type="radio" id="attend_yes" name="entry.2112564173" value="當然，一定到!" required onchange="toggleAttendanceMode('attend')" class="text-champagne-600 focus:ring-champagne-500">
+                            <span class="ml-2 text-sm text-stone-700">當然，一定到!</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
+                            <input type="radio" id="attend_no" name="entry.2112564173" value="無法參加，祝你們幸福!" required onchange="toggleAttendanceMode('absent')" class="text-champagne-600 focus:ring-champagne-500">
+                            <span class="ml-2 text-sm text-stone-700">無法參加，祝你們幸福!</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 3. 與新人的關係 -->
+                <div id="relationshipBlock" style="display: none;">
+                    <label class="block text-sm font-medium text-darkburgundy mb-2">
+                        與新人的關係 <span id="req_relationship" class="text-rosegold-500">*</span>
+                    </label>
+                    <select id="entry_383311355" name="entry.383311355" class="custom-input">
+                        <option value="" disabled selected>請選擇關係</option>
+                        <option value="男方親友">男方親友</option>
+                        <option value="女方親友">女方親友</option>
+                        <option value="共同好友">共同好友</option>
+                    </select>
+                </div>
+
+                <!-- 4. 電話 & 5. Email (點選出席才展開) -->
+                <div id="contactBlock" class="grid grid-cols-1 md:grid-cols-2 gap-6" style="display: none;">
+                    <div>
+                        <label class="block text-sm font-medium text-darkburgundy mb-2">
+                            聯絡電話 <span id="req_phone" class="text-rosegold-500">*</span>
+                        </label>
+                        <input type="tel" 
+                               id="entry_1185979561"
+                               name="entry.1185979561" 
+                               placeholder="例：0912345678" 
+                               class="custom-input">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-darkburgundy mb-2">
+                            電子信箱
+                        </label>
+                        <input type="email" 
+                               id="entry_1819218719"
+                               name="entry.1819218719" 
+                               placeholder="example@mail.com" 
+                               class="custom-input">
+                    </div>
+                </div>
+
+                <!-- 人數配置: 6. 出席人數, 7. 素食人數, 8. 兒童座椅 -->
+                <div id="attendanceDetailsBlock" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2" style="display: none;">
+                    <div>
+                        <label class="block text-sm font-medium text-darkburgundy mb-1">
+                            出席人數 <span class="font-cursive text-xs text-champagne-500 ml-1 uppercase">Guests</span>
+                        </label>
+                        <input type="number" 
+                               id="entry_847222822" 
+                               name="entry.847222822" 
+                               min="1" 
+                               max="20" 
+                               value="1" 
+                               class="line-number-input">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-darkburgundy mb-1">
+                            素食人數 <span class="font-cursive text-xs text-champagne-500 ml-1 uppercase">Vegetarian</span>
+                        </label>
+                        <input type="number" 
+                               id="entry_565339933" 
+                               name="entry.565339933" 
+                               min="0" 
+                               max="20" 
+                               value="0" 
+                               class="line-number-input">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-darkburgundy mb-1">
+                            兒童座椅數量 <span class="font-cursive text-xs text-champagne-500 ml-1 uppercase">High Chairs</span>
+                        </label>
+                        <input type="number" 
+                               id="entry_745612" 
+                               name="entry.745612" 
+                               min="0" 
+                               max="10" 
+                               value="0" 
+                               class="line-number-input">
+                    </div>
+                </div>
+
+                <!-- 9. 喜帖需求 -->
+                <div id="invitationBlock" style="display: none;">
+                    <label class="block text-sm font-medium text-darkburgundy mb-2">
+                        喜帖需求 <span id="req_invitation" class="text-rosegold-500">*</span>
+                    </label>
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
+                            <input type="radio" name="entry.471589357" value="需要，電子跟紙本都想要" class="text-champagne-600 focus:ring-champagne-500">
+                            <span class="ml-2 text-sm text-stone-700">需要，電子跟紙本都想要</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
+                            <input type="radio" name="entry.471589357" value="需要，請寄電子喜帖給我" class="text-champagne-600 focus:ring-champagne-500">
+                            <span class="ml-2 text-sm text-stone-700">需要，請寄電子喜帖給我</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
+                            <input type="radio" name="entry.471589357" value="需要，請寄紙本喜帖給我" class="text-champagne-600 focus:ring-champagne-500">
+                            <span class="ml-2 text-sm text-stone-700">需要，請寄紙本喜帖給我</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
+                            <input type="radio" name="entry.471589357" value="不用，我已經記起來婚禮資訊了" class="text-champagne-600 focus:ring-champagne-500">
+                            <span class="ml-2 text-sm text-stone-700">不用，我已經記起來婚禮資訊了</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 10. 地址與祝福留言 -->
+                <div id="blessingBlock" style="display: none;">
+                    <label class="block text-sm font-medium text-darkburgundy mb-2" id="blessingLabel">
+                        寄送地址 / 給新人的祝福與備註
+                    </label>
+                    <textarea id="entry_380847305"
+                              name="entry.380847305" 
+                              rows="3" 
+                              placeholder="若需要紙本喜帖請附上郵遞區號與地址，也歡迎寫下給我們的祝福..." 
+                              class="custom-input"></textarea>
+                </div>
+
+                <!-- 提交按鈕 -->
+                <div class="text-center pt-2">
+                    <button type="submit" 
+                            id="submitBtn" 
+                            class="w-full md:w-auto px-10 py-3.5 bg-champagne-500 hover:bg-champagne-600 text-white font-medium rounded-full shadow-lg hover:shadow-xl transition-all tracking-widest flex items-center justify-center mx-auto">
+                        <span id="btnText">確認送出資料</span>
+                        <div id="btnSpinner" class="hidden ml-2 w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="py-8 text-center text-xs text-stone-400 mt-10">
+        <p>© Wedding Invitation & RSVP Form. All Rights Reserved.</p>
+    </footer>
+
+    <!-- 成功提交彈出視窗 (Modal) -->
+    <div id="successModal" class="fixed inset-0 bg-darkburgundy/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="glass-card bg-cream p-8 md:p-10 rounded-3xl max-w-md w-full text-center shadow-2xl border border-champagne-300 transform transition-all scale-95 opacity-0 duration-300" id="modalContent">
+            <div class="w-16 h-16 bg-champagne-100 text-champagne-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <h3 class="text-2xl font-normal text-darkburgundy mb-2 tracking-wider">感謝您的回覆！</h3>
+            <p class="text-stone-600 text-sm leading-relaxed mb-6 font-light">
+                我們已經成功收到您的資訊。<br>非常感謝您的祝福與配合！
+            </p>
+            <button onclick="closeModal()" class="px-8 py-2.5 bg-champagne-500 hover:bg-champagne-600 text-white rounded-full text-xs tracking-widest shadow transition-all">
+                關閉視窗
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 設定婚禮目標日期 (請自行修改為您的婚禮日期時間，例如 2026/01/24 12:00)
+        const weddingDate = new Date("2026-01-24T12:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                document.getElementById("cd-days").innerText = "00";
+                document.getElementById("cd-hours").innerText = "00";
+                document.getElementById("cd-minutes").innerText = "00";
+                document.getElementById("cd-seconds").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("cd-days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("cd-hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("cd-minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("cd-seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        function toggleAttendanceMode(mode) {
+            const relationshipBlock = document.getElementById('relationshipBlock');
+            const contactBlock = document.getElementById('contactBlock');
+            const attendanceDetailsBlock = document.getElementById('attendanceDetailsBlock');
+            const invitationBlock = document.getElementById('invitationBlock');
+            const blessingBlock = document.getElementById('blessingBlock');
+            
+            const relationshipSelect = document.getElementById('entry_383311355');
+            const phoneInput = document.getElementById('entry_1185979561');
+            const invitationRadios = document.querySelectorAll('input[name="entry.471589357"]');
+            const blessingArea = document.getElementById('entry_380847305');
+            const blessingLabel = document.getElementById('blessingLabel');
+
+            blessingBlock.style.display = 'block';
+
+            if (mode === 'attend') {
+                relationshipBlock.style.display = 'block';
+                contactBlock.style.display = 'grid';
+                attendanceDetailsBlock.style.display = 'grid';
+                invitationBlock.style.display = 'block';
+
+                relationshipSelect.required = true;
+                phoneInput.required = true;
+                invitationRadios.forEach(r => r.required = true);
+
+                blessingLabel.innerText = '寄送地址 / 給新人的祝福與備註';
+                blessingArea.placeholder = '若需要紙本喜帖請附上郵遞區號與地址，也歡迎寫下給我們的祝福...';
+            } else if (mode === 'absent') {
+                relationshipBlock.style.display = 'none';
+                contactBlock.style.display = 'none';
+                attendanceDetailsBlock.style.display = 'none';
+                invitationBlock.style.display = 'none';
+
+                relationshipSelect.required = false;
+                phoneInput.required = false;
+                invitationRadios.forEach(r => r.required = false);
+
+                blessingLabel.innerText = '給新人的祝福與留言（選填）';
+                blessingArea.placeholder = '請寫下給我們的祝福...';
+            }
+        }
+
+        let isSubmitted = false;
+
+        function handleFormSubmit(event) {
+            isSubmitted = true;
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const submitBtn = document.getElementById('submitBtn');
+
+            btnText.innerText = '傳送中...';
+            btnSpinner.classList.remove('hidden');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80');
+        }
+
+        function handleIframeLoad() {
+            if (isSubmitted) {
+                const btnText = document.getElementById('btnText');
+                const btnSpinner = document.getElementById('btnSpinner');
+                const submitBtn = document.getElementById('submitBtn');
+
+                btnText.innerText = '確認送出資料';
+                btnSpinner.classList.add('hidden');
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-80');
+
+                showModal();
+
+                document.getElementById('weddingRsvpForm').reset();
+
+                ['relationshipBlock', 'contactBlock', 'attendanceDetailsBlock', 'invitationBlock', 'blessingBlock'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
+                });
+
+                isSubmitted = false;
+            }
+        }
+
+        function showModal() {
+            const modal = document.getElementById('successModal');
+            const content = document.getElementById('modalContent');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('successModal');
+            const content = document.getElementById('modalContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
+</body>
+</html>

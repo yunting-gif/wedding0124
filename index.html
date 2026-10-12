@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>婚禮出席回覆 | RSVP Form</title>
+    <title>婚禮邀請函與出席回覆 | Wedding Invitation & RSVP</title>
     <!-- Open Graph 分享預覽標籤 (LINE / 微信 / FB) -->
-    <meta property="og:title" content="婚禮出席回覆 | RSVP Form">
-    <meta property="og:description" content="誠摯邀請您參加我們的婚禮，請填寫出席回覆表單。">
+    <meta property="og:title" content="婚禮邀請函與出席回覆 | Wedding Invitation & RSVP">
+    <meta property="og:description" content="誠摯邀請您參加我們的婚禮，請點擊連結填寫出席回覆。">
     <meta property="og:type" content="website">
     
     <!-- Tailwind CSS -->
@@ -55,7 +55,22 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 滿版主視覺照片容器（替代原本的 canva-wrapper） */
+        .photo-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #FDFAF6;
+            overflow: hidden;
+        }
+
+        .photo-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         .glass-card {
@@ -81,26 +96,7 @@
             box-shadow: 0 0 0 3px rgba(181, 148, 106, 0.15);
         }
 
-        /* 數字輸入框底線風格 */
-        .line-number-input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 1.5px solid #DBC7AF;
-            border-radius: 0;
-            padding: 0.5rem 0.25rem;
-            color: #2C1820;
-            font-size: 1.125rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .line-number-input:focus {
-            outline: none;
-            border-bottom-color: #B5946A;
-        }
-
-        /* 移除原生 number input 預設小箭頭 */
+        /* 移除原生數值鍵盤輸入框預設箭頭 */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none;
@@ -111,14 +107,29 @@
         }
     </style>
 </head>
-<body class="min-h-screen py-8 md:py-12 flex items-center justify-center">
+<body class="min-h-screen pb-12">
 
     <!-- 隱藏式 Iframe，用於接收 Google Form 提交結果 -->
     <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="handleIframeLoad()"></iframe>
 
-    <main class="w-full max-w-2xl mx-auto px-4">
-        <div class="glass-card p-6 md:p-10 rounded-3xl shadow-xl border border-champagne-200">
-            <!-- 標題區域 -->
+    <!-- 1. 頂部滿版照片區域（已把原本的 Canva iframe 替換為您的高清婚紗照片） -->
+    <section class="w-full relative bg-cream">
+        <div class="photo-wrapper">
+            <img src="20260810MO-0140-2.jpg" alt="婚禮主視覺照片" loading="eager">
+        </div>
+    </section>
+
+    <!-- 2. 中間引導按鈕 -->
+    <div class="text-center py-6 bg-cream">
+        <a href="#rsvp-form-section" class="inline-flex items-center space-x-2 text-champagne-600 hover:text-champagne-700 bg-champagne-100/80 px-6 py-2.5 rounded-full text-sm font-medium tracking-widest shadow-sm hover:shadow transition-all">
+            <span>前往填寫出席回覆</span>
+            <i class="fa-solid fa-arrow-down animate-bounce text-xs"></i>
+        </a>
+    </div>
+
+    <!-- 3. RSVP 婚禮出席回覆表單 -->
+    <main class="w-full max-w-3xl mx-auto px-4">
+        <section id="rsvp-form-section" class="glass-card p-6 md:p-10 rounded-3xl shadow-xl border border-champagne-200">
             <div class="text-center mb-8">
                 <span class="font-cursive text-sm tracking-widest text-champagne-500 uppercase block mb-1">RSVP Form</span>
                 <h2 class="text-2xl md:text-3xl font-normal tracking-widest text-darkburgundy">婚禮出席回覆</h2>
@@ -154,11 +165,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
                             <input type="radio" id="attend_yes" name="entry.2112564173" value="當然，一定到!" required onchange="toggleAttendanceMode('attend')" class="text-champagne-600 focus:ring-champagne-500">
-                            <span class="ml-2 text-sm text-stone-700">當然，一定到!</span>
+                            <span class="ml-2 text-sm text-stone-700 font-medium">當然，一定到!</span>
                         </label>
                         <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
                             <input type="radio" id="attend_no" name="entry.2112564173" value="無法參加，祝你們幸福!" required onchange="toggleAttendanceMode('absent')" class="text-champagne-600 focus:ring-champagne-500">
-                            <span class="ml-2 text-sm text-stone-700">無法參加，祝你們幸福!</span>
+                            <span class="ml-2 text-sm text-stone-700 font-medium">無法參加，祝你們幸福!</span>
                         </label>
                     </div>
                 </div>
@@ -200,15 +211,15 @@
                     </div>
                 </div>
 
-                <!-- 人數配置: 6. 出席人數, 7. 素食人數, 8. 兒童座椅 (帶有手動按鈕加減) -->
+                <!-- 人數配置: 6. 出席人數, 7. 素食人數, 8. 兒童座椅 (帶手機加減按鈕風格) -->
                 <div id="attendanceDetailsBlock" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2" style="display: none;">
                     <!-- 出席人數 -->
                     <div>
                         <label class="block text-sm font-medium text-darkburgundy mb-2">
                             出席人數 <span class="font-cursive text-xs text-champagne-500 ml-1 uppercase">Guests</span>
                         </label>
-                        <div class="flex items-center space-x-2">
-                            <button type="button" onclick="adjustCount('entry_847222822', -1, 1)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
+                        <div class="flex items-center border-b-2 border-champagne-300 pb-1">
+                            <button type="button" onclick="adjustCount('entry_847222822', -1, 1)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
                                 <i class="fa-solid fa-minus text-xs"></i>
                             </button>
                             <input type="number" 
@@ -217,8 +228,8 @@
                                    min="1" 
                                    max="20" 
                                    value="1" 
-                                   class="line-number-input">
-                            <button type="button" onclick="adjustCount('entry_847222822', 1, 1)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
+                                   class="w-full text-center bg-transparent border-none text-lg font-medium text-darkburgundy focus:outline-none px-2">
+                            <button type="button" onclick="adjustCount('entry_847222822', 1, 1)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
                                 <i class="fa-solid fa-plus text-xs"></i>
                             </button>
                         </div>
@@ -229,8 +240,8 @@
                         <label class="block text-sm font-medium text-darkburgundy mb-2">
                             素食人數 <span class="font-cursive text-xs text-champagne-500 ml-1 uppercase">Vegetarian</span>
                         </label>
-                        <div class="flex items-center space-x-2">
-                            <button type="button" onclick="adjustCount('entry_565339933', -1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
+                        <div class="flex items-center border-b-2 border-champagne-300 pb-1">
+                            <button type="button" onclick="adjustCount('entry_565339933', -1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
                                 <i class="fa-solid fa-minus text-xs"></i>
                             </button>
                             <input type="number" 
@@ -239,20 +250,20 @@
                                    min="0" 
                                    max="20" 
                                    value="0" 
-                                   class="line-number-input">
-                            <button type="button" onclick="adjustCount('entry_565339933', 1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
+                                   class="w-full text-center bg-transparent border-none text-lg font-medium text-darkburgundy focus:outline-none px-2">
+                            <button type="button" onclick="adjustCount('entry_565339933', 1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
                                 <i class="fa-solid fa-plus text-xs"></i>
                             </button>
                         </div>
                     </div>
 
-                    <!-- 兒童座椅 -->
+                    <!-- 兒童座椅數量 -->
                     <div>
                         <label class="block text-sm font-medium text-darkburgundy mb-2">
                             兒童座椅數量 <span class="font-cursive text-xs text-champagne-500 ml-1 uppercase">High Chairs</span>
                         </label>
-                        <div class="flex items-center space-x-2">
-                            <button type="button" onclick="adjustCount('entry_745612', -1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
+                        <div class="flex items-center border-b-2 border-champagne-300 pb-1">
+                            <button type="button" onclick="adjustCount('entry_745612', -1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
                                 <i class="fa-solid fa-minus text-xs"></i>
                             </button>
                             <input type="number" 
@@ -261,8 +272,8 @@
                                    min="0" 
                                    max="10" 
                                    value="0" 
-                                   class="line-number-input">
-                            <button type="button" onclick="adjustCount('entry_745612', 1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
+                                   class="w-full text-center bg-transparent border-none text-lg font-medium text-darkburgundy focus:outline-none px-2">
+                            <button type="button" onclick="adjustCount('entry_745612', 1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
                                 <i class="fa-solid fa-plus text-xs"></i>
                             </button>
                         </div>
@@ -316,8 +327,12 @@
                     </button>
                 </div>
             </form>
-        </div>
+        </section>
     </main>
+
+    <footer class="py-8 text-center text-xs text-stone-400 mt-10">
+        <p>© Wedding Invitation & RSVP Form. All Rights Reserved.</p>
+    </footer>
 
     <!-- 成功提交彈出視窗 (Modal) -->
     <div id="successModal" class="fixed inset-0 bg-darkburgundy/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
@@ -336,17 +351,19 @@
     </div>
 
     <script>
-        // 微調按鈕數字加減
+        // 手機與電腦通用的數值微調函數 (+ / -)
         function adjustCount(inputId, delta, minVal) {
             const input = document.getElementById(inputId);
             if (!input) return;
-            let currentVal = parseInt(input.value) || 0;
-            let newVal = currentVal + delta;
-            if (newVal < minVal) newVal = minVal;
-            input.value = newVal;
+            let val = parseInt(input.value, 10);
+            if (isNaN(val)) val = minVal;
+            val += delta;
+            if (val < minVal) val = minVal;
+            const maxVal = parseInt(input.max, 10);
+            if (!isNaN(maxVal) && val > maxVal) val = maxVal;
+            input.value = val;
         }
 
-        // 切換出席模式邏輯
         function toggleAttendanceMode(mode) {
             const relationshipBlock = document.getElementById('relationshipBlock');
             const contactBlock = document.getElementById('contactBlock');

@@ -73,24 +73,24 @@
             display: block;
         }
 
-        /* 1. 正方形 Google 地圖精準覆蓋 (定位新尚豪婚宴會館) */
+        /* 1. 正方形 Google 地圖一鍵導航卡片精準覆蓋 */
         .overlay-map-box {
             position: absolute;
-            top: 48.0%; /* 垂直位置調整 */
-            left: 11.5%; /* 水平置中調整 */
-            width: 77%;  /* 對齊原始地圖寬度 */
-            aspect-ratio: 1 / 1; /* 強制保持正方形 */
+            top: 48.0%; 
+            left: 11.5%; 
+            width: 77%;  
+            aspect-ratio: 1 / 1; 
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.12);
-            background: #fff;
+            background: #ffffff;
             z-index: 10;
         }
 
         /* 2. 正方形酒紅倒數計時方塊精準覆蓋 (月曆正下方) */
         .overlay-countdown-box {
             position: absolute;
-            top: 79.2%; /* 往下調移，精準蓋住月曆底下的紅框 */
+            top: 79.2%; 
             left: 10%;
             width: 80%;
             z-index: 10;
@@ -98,7 +98,7 @@
 
         /* 正方形小卡樣式 */
         .square-cd-card {
-            aspect-ratio: 1 / 1; /* 1:1 正方形 */
+            aspect-ratio: 1 / 1; 
             background-color: #9E1B1B;
             color: #ffffff;
             border-radius: 10px;
@@ -154,16 +154,24 @@
             <!-- 喜帖長圖 -->
             <img src="wedding-long-image.png" alt="婚禮喜帖" class="invitation-bg" loading="eager">
 
-            <!-- A. 新尚豪婚宴會館 正方形 Google 地圖 -->
+            <!-- A. 新尚豪婚宴會館 地圖互動與導航卡片 -->
             <div class="overlay-map-box">
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3654.8970425785025!2d120.482019776127!3d23.680970178717013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346ec84d2a1bf941%3A0xbbfd118991ef2cb3!2z5paw5bCa6LGs5ama5pWZ2Lbf6aSo!5e0!3m2!1szh-TW!2stw!4v1710000000000!5m2!1szh-TW!2stw" 
-                    width="100%" 
-                    height="100%" 
-                    style="border:0;" 
-                    allowfullscreen="" 
-                    loading="lazy">
-                </iframe>
+                <a href="https://maps.google.com/?q=新尚豪婚宴會館+雲林縣斗南鎮建國二路122號" target="_blank" class="w-full h-full flex flex-col justify-between p-4 bg-gradient-to-b from-stone-50 to-amber-50/30 text-stone-800 hover:opacity-95 transition-all text-center no-underline border border-amber-200/60 rounded-xl">
+                    <div class="pt-2">
+                        <span class="inline-block px-2.5 py-0.5 bg-red-100 text-red-700 text-[10px] font-medium rounded-full mb-1.5">
+                            <i class="fa-solid fa-location-dot mr-1"></i>宴客地點
+                        </span>
+                        <h4 class="text-base font-bold text-darkburgundy tracking-wider mb-1">新尚豪婚宴會館</h4>
+                        <p class="text-[11px] text-stone-500 font-light leading-snug">雲林縣斗南鎮明昌里建國二路122號</p>
+                    </div>
+
+                    <div class="pb-1">
+                        <div class="w-full py-2 bg-champagne-500 hover:bg-champagne-600 text-white rounded-lg text-xs font-medium tracking-widest shadow-sm flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <span>點此開啟 Google 地圖導航</span>
+                        </div>
+                    </div>
+                </a>
             </div>
 
             <!-- B. 正方形酒紅倒數計時器 (對齊月曆正下方) -->
@@ -306,169 +314,3 @@
                     <div>
                         <label class="block text-sm font-medium text-darkburgundy mb-2">
                             素食人數 <span class="font-cursive text-xs text-champagne-500 ml-1 uppercase">Vegetarian</span>
-                        </label>
-                        <div class="flex items-center border-b-2 border-champagne-300 pb-1">
-                            <button type="button" onclick="adjustCount('entry_565339933', -1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
-                                <i class="fa-solid fa-minus text-xs"></i>
-                            </button>
-                            <input type="number" id="entry_565339933" name="entry.565339933" min="0" max="20" value="0" class="w-full text-center bg-transparent border-none text-lg font-medium text-darkburgundy focus:outline-none px-2">
-                            <button type="button" onclick="adjustCount('entry_565339933', 1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
-                                <i class="fa-solid fa-plus text-xs"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-darkburgundy mb-2">
-                            兒童座椅數量 <span class="font-cursive text-xs text-champagne-500 ml-1 uppercase">High Chairs</span>
-                        </label>
-                        <div class="flex items-center border-b-2 border-champagne-300 pb-1">
-                            <button type="button" onclick="adjustCount('entry_745612', -1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
-                                <i class="fa-solid fa-minus text-xs"></i>
-                            </button>
-                            <input type="number" id="entry_745612" name="entry.745612" min="0" max="10" value="0" class="w-full text-center bg-transparent border-none text-lg font-medium text-darkburgundy focus:outline-none px-2">
-                            <button type="button" onclick="adjustCount('entry_745612', 1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
-                                <i class="fa-solid fa-plus text-xs"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 喜帖需求 -->
-                <div id="invitationBlock" style="display: none;">
-                    <label class="block text-sm font-medium text-darkburgundy mb-2">
-                        喜帖需求 <span id="req_invitation" class="text-rosegold-500">*</span>
-                    </label>
-                    <div class="space-y-2">
-                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
-                            <input type="radio" name="entry.471589357" value="需要，電子跟紙本都想要" class="text-champagne-600 focus:ring-champagne-500">
-                            <span class="ml-2 text-sm text-stone-700">需要，電子跟紙本都想要</span>
-                        </label>
-                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
-                            <input type="radio" name="entry.471589357" value="需要，請寄電子喜帖給我" class="text-champagne-600 focus:ring-champagne-500">
-                            <span class="ml-2 text-sm text-stone-700">需要，請寄電子喜帖給我</span>
-                        </label>
-                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
-                            <input type="radio" name="entry.471589357" value="需要，請寄紙本喜帖給我" class="text-champagne-600 focus:ring-champagne-500">
-                            <span class="ml-2 text-sm text-stone-700">需要，請寄紙本喜帖給我</span>
-                        </label>
-                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
-                            <input type="radio" name="entry.471589357" value="不用，我已經記起來婚禮資訊了" class="text-champagne-600 focus:ring-champagne-500">
-                            <span class="ml-2 text-sm text-stone-700">不用，我已經記起來婚禮資訊了</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- 地址與祝福留言 -->
-                <div id="blessingBlock" style="display: none;">
-                    <label class="block text-sm font-medium text-darkburgundy mb-2" id="blessingLabel">
-                        寄送地址 / 給新人的祝福與備註
-                    </label>
-                    <textarea id="entry_380847305" name="entry.380847305" rows="3" placeholder="若需要紙本喜帖請附上郵遞區號與地址，也歡迎寫下給我們的祝福..." class="custom-input"></textarea>
-                </div>
-
-                <!-- 提交按鈕 -->
-                <div class="text-center pt-2">
-                    <button type="submit" id="submitBtn" class="w-full md:w-auto px-10 py-3.5 bg-champagne-500 hover:bg-champagne-600 text-white font-medium rounded-full shadow-lg hover:shadow-xl transition-all tracking-widest flex items-center justify-center mx-auto">
-                        <span id="btnText">確認送出資料</span>
-                        <div id="btnSpinner" class="hidden ml-2 w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    </button>
-                </div>
-            </form>
-        </section>
-    </main>
-
-    <footer class="py-8 text-center text-xs text-stone-400 mt-10">
-        <p>© Wedding Invitation & RSVP Form. All Rights Reserved.</p>
-    </footer>
-
-    <!-- 成功提交彈出視窗 (Modal) -->
-    <div id="successModal" class="fixed inset-0 bg-darkburgundy/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-        <div class="glass-card bg-cream p-8 md:p-10 rounded-3xl max-w-md w-full text-center shadow-2xl border border-champagne-300 transform transition-all scale-95 opacity-0 duration-300" id="modalContent">
-            <div class="w-16 h-16 bg-champagne-100 text-champagne-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
-                <i class="fa-solid fa-heart"></i>
-            </div>
-            <h3 class="text-2xl font-normal text-darkburgundy mb-2 tracking-wider">感謝您的回覆！</h3>
-            <p class="text-stone-600 text-sm leading-relaxed mb-6 font-light">
-                我們已經成功收到您的資訊。<br>非常感謝您的祝福與配合！
-            </p>
-            <button onclick="closeModal()" class="px-8 py-2.5 bg-champagne-500 hover:bg-champagne-600 text-white rounded-full text-xs tracking-widest shadow transition-all">
-                關閉視窗
-            </button>
-        </div>
-    </div>
-
-    <script>
-        /* 定義目標時間：2027年1月24日 中午 12:00:00 */
-        const weddingTargetDate = new Date("2027-01-24T12:00:00").getTime();
-        
-        function updateDynamicCountdown() {
-            const now = new Date().getTime();
-            const timeRemaining = weddingTargetDate - now;
-
-            if (timeRemaining < 0) {
-                document.getElementById("cd-days").innerText = "00";
-                document.getElementById("cd-hours").innerText = "00";
-                document.getElementById("cd-minutes").innerText = "00";
-                document.getElementById("cd-seconds").innerText = "00";
-                return;
-            }
-
-            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-            document.getElementById("cd-days").innerText = String(days).padStart(2, '0');
-            document.getElementById("cd-hours").innerText = String(hours).padStart(2, '0');
-            document.getElementById("cd-minutes").innerText = String(minutes).padStart(2, '0');
-            document.getElementById("cd-seconds").innerText = String(seconds).padStart(2, '0');
-        }
-
-        setInterval(updateDynamicCountdown, 1000);
-        updateDynamicCountdown();
-
-        // 表單邏輯
-        function adjustCount(inputId, delta, minVal) {
-            const input = document.getElementById(inputId);
-            if (!input) return;
-            let val = parseInt(input.value, 10);
-            if (isNaN(val)) val = minVal;
-            val += delta;
-            if (val < minVal) val = minVal;
-            const maxVal = parseInt(input.max, 10);
-            if (!isNaN(maxVal) && val > maxVal) val = maxVal;
-            input.value = val;
-        }
-
-        function toggleAttendanceMode(mode) {
-            const relationshipBlock = document.getElementById('relationshipBlock');
-            const contactBlock = document.getElementById('contactBlock');
-            const attendanceDetailsBlock = document.getElementById('attendanceDetailsBlock');
-            const invitationBlock = document.getElementById('invitationBlock');
-            const blessingBlock = document.getElementById('blessingBlock');
-            
-            const relationshipSelect = document.getElementById('entry_383311355');
-            const phoneInput = document.getElementById('entry_1185979561');
-            const invitationRadios = document.querySelectorAll('input[name="entry.471589357"]');
-            const blessingArea = document.getElementById('entry_380847305');
-            const blessingLabel = document.getElementById('blessingLabel');
-
-            blessingBlock.style.display = 'block';
-
-            if (mode === 'attend') {
-                relationshipBlock.style.display = 'block';
-                contactBlock.style.display = 'grid';
-                attendanceDetailsBlock.style.display = 'grid';
-                invitationBlock.style.display = 'block';
-
-                relationshipSelect.required = true;
-                phoneInput.required = true;
-                invitationRadios.forEach(r => r.required = true);
-
-                blessingLabel.innerText = '寄送地址 / 給新人的祝福與備註';
-                blessingArea.placeholder = '若需要紙本喜帖請附上郵遞區號與地址，也歡迎寫下給我們的祝福...';
-            } else if (mode === 'absent') {
-                relationshipBlock.style.display = 'none';
-                contactBlock.style.display = 'none';
-                attendanceDetailsBlock.style.display = '

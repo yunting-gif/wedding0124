@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>婚禮邀請函與出席回覆 | Wedding Invitation & RSVP</title>
-    <!-- Open Graph 分享預覽標籤 -->
-    <meta property="og:title" content="婚禮邀請函與出席回覆 | Wedding Invitation & RSVP">
-    <meta property="og:description" content="誠摯邀請您參加我們的婚禮，請點擊連結填寫出席回覆。">
+    <title>婚禮出席回覆 | RSVP Form</title>
+    <!-- Open Graph 分享預覽標籤 (LINE / 微信 / FB) -->
+    <meta property="og:title" content="婚禮出席回覆 | RSVP Form">
+    <meta property="og:description" content="誠摯邀請您參加我們的婚禮，請填寫出席回覆表單。">
     <meta property="og:type" content="website">
     
     <!-- Tailwind CSS -->
@@ -36,8 +36,7 @@
                             500: '#C07D83',
                         },
                         cream: '#FDFAF6',
-                        darkburgundy: '#2C1820',
-                        weddingred: '#9E1B1B'
+                        darkburgundy: '#2C1820'
                     },
                     fontFamily: {
                         serif: ['"Noto Serif TC"', 'serif'],
@@ -56,58 +55,7 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-        }
-
-        /* 喜帖長圖容器 */
-        .invitation-container {
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-            margin: 0 auto;
-            background-color: #FDFAF6;
-        }
-
-        .invitation-bg {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        /* 1. 正方形 Google 地圖一鍵導航卡片精準覆蓋 */
-        .overlay-map-box {
-            position: absolute;
-            top: 48.0%; 
-            left: 11.5%; 
-            width: 77%;  
-            aspect-ratio: 1 / 1; 
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
-            background: #ffffff;
-            z-index: 10;
-        }
-
-        /* 2. 正方形酒紅倒數計時方塊精準覆蓋 (月曆正下方) */
-        .overlay-countdown-box {
-            position: absolute;
-            top: 79.2%; 
-            left: 10%;
-            width: 80%;
-            z-index: 10;
-        }
-
-        /* 正方形小卡樣式 */
-        .square-cd-card {
-            aspect-ratio: 1 / 1; 
-            background-color: #9E1B1B;
-            color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(158, 27, 27, 0.3);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 4px;
+            -webkit-font-smoothing: antialiased;
         }
 
         .glass-card {
@@ -133,6 +81,26 @@
             box-shadow: 0 0 0 3px rgba(181, 148, 106, 0.15);
         }
 
+        /* 數字輸入框底線風格 */
+        .line-number-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid #DBC7AF;
+            border-radius: 0;
+            padding: 0.5rem 0.25rem;
+            color: #2C1820;
+            font-size: 1.125rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .line-number-input:focus {
+            outline: none;
+            border-bottom-color: #B5946A;
+        }
+
+        /* 移除原生 number input 預設小箭頭 */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none;
@@ -143,76 +111,14 @@
         }
     </style>
 </head>
-<body class="min-h-screen pb-12">
+<body class="min-h-screen py-8 md:py-12 flex items-center justify-center">
 
     <!-- 隱藏式 Iframe，用於接收 Google Form 提交結果 -->
     <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="handleIframeLoad()"></iframe>
 
-    <!-- 喜帖主圖 + 覆蓋圖層 -->
-    <section class="w-full relative bg-cream">
-        <div class="invitation-container">
-            <!-- 喜帖長圖 -->
-            <img src="wedding-long-image.png" alt="婚禮喜帖" class="invitation-bg" loading="eager">
-
-            <!-- A. 新尚豪婚宴會館 地圖互動與導航卡片 -->
-            <div class="overlay-map-box">
-                <a href="https://maps.google.com/?q=新尚豪婚宴會館+雲林縣斗南鎮建國二路122號" target="_blank" class="w-full h-full flex flex-col justify-between p-4 bg-gradient-to-b from-stone-50 to-amber-50/30 text-stone-800 hover:opacity-95 transition-all text-center no-underline border border-amber-200/60 rounded-xl">
-                    <div class="pt-2">
-                        <span class="inline-block px-2.5 py-0.5 bg-red-100 text-red-700 text-[10px] font-medium rounded-full mb-1.5">
-                            <i class="fa-solid fa-location-dot mr-1"></i>宴客地點
-                        </span>
-                        <h4 class="text-base font-bold text-darkburgundy tracking-wider mb-1">新尚豪婚宴會館</h4>
-                        <p class="text-[11px] text-stone-500 font-light leading-snug">雲林縣斗南鎮明昌里建國二路122號</p>
-                    </div>
-
-                    <div class="pb-1">
-                        <div class="w-full py-2 bg-champagne-500 hover:bg-champagne-600 text-white rounded-lg text-xs font-medium tracking-widest shadow-sm flex items-center justify-center space-x-1.5">
-                            <i class="fa-solid fa-map-location-dot"></i>
-                            <span>點此開啟 Google 地圖導航</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- B. 正方形酒紅倒數計時器 (對齊月曆正下方) -->
-            <div class="overlay-countdown-box">
-                <div class="grid grid-cols-4 gap-2 text-center">
-                    <!-- 天 -->
-                    <div class="square-cd-card">
-                        <span id="cd-days" class="text-base md:text-lg font-bold font-sans leading-none mb-1">00</span>
-                        <span class="text-[10px] font-light leading-none opacity-90">天</span>
-                    </div>
-                    <!-- 時 -->
-                    <div class="square-cd-card">
-                        <span id="cd-hours" class="text-base md:text-lg font-bold font-sans leading-none mb-1">00</span>
-                        <span class="text-[10px] font-light leading-none opacity-90">時</span>
-                    </div>
-                    <!-- 分 -->
-                    <div class="square-cd-card">
-                        <span id="cd-minutes" class="text-base md:text-lg font-bold font-sans leading-none mb-1">00</span>
-                        <span class="text-[10px] font-light leading-none opacity-90">分</span>
-                    </div>
-                    <!-- 秒 -->
-                    <div class="square-cd-card">
-                        <span id="cd-seconds" class="text-base md:text-lg font-bold font-sans leading-none mb-1">00</span>
-                        <span class="text-[10px] font-light leading-none opacity-90">秒</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 中間引導按鈕 -->
-    <div class="text-center py-6 bg-cream">
-        <a href="#rsvp-form-section" class="inline-flex items-center space-x-2 text-champagne-600 hover:text-champagne-700 bg-champagne-100/80 px-6 py-2.5 rounded-full text-sm font-medium tracking-widest shadow-sm hover:shadow transition-all">
-            <span>前往填寫出席回覆</span>
-            <i class="fa-solid fa-arrow-down animate-bounce text-xs"></i>
-        </a>
-    </div>
-
-    <!-- RSVP 婚禮出席回覆表單 -->
-    <main class="w-full max-w-3xl mx-auto px-4">
-        <section id="rsvp-form-section" class="glass-card p-6 md:p-10 rounded-3xl shadow-xl border border-champagne-200">
+    <main class="w-full max-w-2xl mx-auto px-4">
+        <div class="glass-card p-6 md:p-10 rounded-3xl shadow-xl border border-champagne-200">
+            <!-- 標題區域 -->
             <div class="text-center mb-8">
                 <span class="font-cursive text-sm tracking-widest text-champagne-500 uppercase block mb-1">RSVP Form</span>
                 <h2 class="text-2xl md:text-3xl font-normal tracking-widest text-darkburgundy">婚禮出席回覆</h2>
@@ -248,11 +154,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
                             <input type="radio" id="attend_yes" name="entry.2112564173" value="當然，一定到!" required onchange="toggleAttendanceMode('attend')" class="text-champagne-600 focus:ring-champagne-500">
-                            <span class="ml-2 text-sm text-stone-700 font-medium">當然，一定到!</span>
+                            <span class="ml-2 text-sm text-stone-700">當然，一定到!</span>
                         </label>
                         <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
                             <input type="radio" id="attend_no" name="entry.2112564173" value="無法參加，祝你們幸福!" required onchange="toggleAttendanceMode('absent')" class="text-champagne-600 focus:ring-champagne-500">
-                            <span class="ml-2 text-sm text-stone-700 font-medium">無法參加，祝你們幸福!</span>
+                            <span class="ml-2 text-sm text-stone-700">無法參加，祝你們幸福!</span>
                         </label>
                     </div>
                 </div>
@@ -270,7 +176,7 @@
                     </select>
                 </div>
 
-                <!-- 4. 電話 & 5. Email -->
+                <!-- 4. 電話 & 5. Email (點選出席才展開) -->
                 <div id="contactBlock" class="grid grid-cols-1 md:grid-cols-2 gap-6" style="display: none;">
                     <div>
                         <label class="block text-sm font-medium text-darkburgundy mb-2">
@@ -294,23 +200,252 @@
                     </div>
                 </div>
 
-                <!-- 人數配置 -->
+                <!-- 人數配置: 6. 出席人數, 7. 素食人數, 8. 兒童座椅 (帶有手動按鈕加減) -->
                 <div id="attendanceDetailsBlock" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2" style="display: none;">
+                    <!-- 出席人數 -->
                     <div>
                         <label class="block text-sm font-medium text-darkburgundy mb-2">
                             出席人數 <span class="font-cursive text-xs text-champagne-500 ml-1 uppercase">Guests</span>
                         </label>
-                        <div class="flex items-center border-b-2 border-champagne-300 pb-1">
-                            <button type="button" onclick="adjustCount('entry_847222822', -1, 1)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
+                        <div class="flex items-center space-x-2">
+                            <button type="button" onclick="adjustCount('entry_847222822', -1, 1)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
                                 <i class="fa-solid fa-minus text-xs"></i>
                             </button>
-                            <input type="number" id="entry_847222822" name="entry.847222822" min="1" max="20" value="1" class="w-full text-center bg-transparent border-none text-lg font-medium text-darkburgundy focus:outline-none px-2">
-                            <button type="button" onclick="adjustCount('entry_847222822', 1, 1)" class="w-8 h-8 rounded-full bg-champagne-100 hover:bg-champagne-200 text-champagne-700 font-bold flex items-center justify-center transition-colors focus:outline-none active:scale-95">
+                            <input type="number" 
+                                   id="entry_847222822" 
+                                   name="entry.847222822" 
+                                   min="1" 
+                                   max="20" 
+                                   value="1" 
+                                   class="line-number-input">
+                            <button type="button" onclick="adjustCount('entry_847222822', 1, 1)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
                                 <i class="fa-solid fa-plus text-xs"></i>
                             </button>
                         </div>
                     </div>
 
+                    <!-- 素食人數 -->
                     <div>
                         <label class="block text-sm font-medium text-darkburgundy mb-2">
                             素食人數 <span class="font-cursive text-xs text-champagne-500 ml-1 uppercase">Vegetarian</span>
+                        </label>
+                        <div class="flex items-center space-x-2">
+                            <button type="button" onclick="adjustCount('entry_565339933', -1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
+                                <i class="fa-solid fa-minus text-xs"></i>
+                            </button>
+                            <input type="number" 
+                                   id="entry_565339933" 
+                                   name="entry.565339933" 
+                                   min="0" 
+                                   max="20" 
+                                   value="0" 
+                                   class="line-number-input">
+                            <button type="button" onclick="adjustCount('entry_565339933', 1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 兒童座椅 -->
+                    <div>
+                        <label class="block text-sm font-medium text-darkburgundy mb-2">
+                            兒童座椅數量 <span class="font-cursive text-xs text-champagne-500 ml-1 uppercase">High Chairs</span>
+                        </label>
+                        <div class="flex items-center space-x-2">
+                            <button type="button" onclick="adjustCount('entry_745612', -1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
+                                <i class="fa-solid fa-minus text-xs"></i>
+                            </button>
+                            <input type="number" 
+                                   id="entry_745612" 
+                                   name="entry.745612" 
+                                   min="0" 
+                                   max="10" 
+                                   value="0" 
+                                   class="line-number-input">
+                            <button type="button" onclick="adjustCount('entry_745612', 1, 0)" class="w-8 h-8 rounded-full bg-champagne-100 text-champagne-600 hover:bg-champagne-200 flex items-center justify-center focus:outline-none transition-colors">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. 喜帖需求 -->
+                <div id="invitationBlock" style="display: none;">
+                    <label class="block text-sm font-medium text-darkburgundy mb-2">
+                        喜帖需求 <span id="req_invitation" class="text-rosegold-500">*</span>
+                    </label>
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
+                            <input type="radio" name="entry.471589357" value="需要，電子跟紙本都想要" class="text-champagne-600 focus:ring-champagne-500">
+                            <span class="ml-2 text-sm text-stone-700">需要，電子跟紙本都想要</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
+                            <input type="radio" name="entry.471589357" value="需要，請寄電子喜帖給我" class="text-champagne-600 focus:ring-champagne-500">
+                            <span class="ml-2 text-sm text-stone-700">需要，請寄電子喜帖給我</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
+                            <input type="radio" name="entry.471589357" value="需要，請寄紙本喜帖給我" class="text-champagne-600 focus:ring-champagne-500">
+                            <span class="ml-2 text-sm text-stone-700">需要，請寄紙本喜帖給我</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-champagne-200 rounded-lg bg-white/70 cursor-pointer hover:border-champagne-400 transition-colors">
+                            <input type="radio" name="entry.471589357" value="不用，我已經記起來婚禮資訊了" class="text-champagne-600 focus:ring-champagne-500">
+                            <span class="ml-2 text-sm text-stone-700">不用，我已經記起來婚禮資訊了</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 10. 地址與祝福留言 -->
+                <div id="blessingBlock" style="display: none;">
+                    <label class="block text-sm font-medium text-darkburgundy mb-2" id="blessingLabel">
+                        寄送地址 / 給新人的祝福與備註
+                    </label>
+                    <textarea id="entry_380847305"
+                              name="entry.380847305" 
+                              rows="3" 
+                              placeholder="若需要紙本喜帖請附上郵遞區號與地址，也歡迎寫下給我們的祝福..." 
+                              class="custom-input"></textarea>
+                </div>
+
+                <!-- 提交按鈕 -->
+                <div class="text-center pt-2">
+                    <button type="submit" 
+                            id="submitBtn" 
+                            class="w-full md:w-auto px-10 py-3.5 bg-champagne-500 hover:bg-champagne-600 text-white font-medium rounded-full shadow-lg hover:shadow-xl transition-all tracking-widest flex items-center justify-center mx-auto">
+                        <span id="btnText">確認送出資料</span>
+                        <div id="btnSpinner" class="hidden ml-2 w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- 成功提交彈出視窗 (Modal) -->
+    <div id="successModal" class="fixed inset-0 bg-darkburgundy/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="glass-card bg-cream p-8 md:p-10 rounded-3xl max-w-md w-full text-center shadow-2xl border border-champagne-300 transform transition-all scale-95 opacity-0 duration-300" id="modalContent">
+            <div class="w-16 h-16 bg-champagne-100 text-champagne-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <h3 class="text-2xl font-normal text-darkburgundy mb-2 tracking-wider">感謝您的回覆！</h3>
+            <p class="text-stone-600 text-sm leading-relaxed mb-6 font-light">
+                我們已經成功收到您的資訊。<br>非常感謝您的祝福與配合！
+            </p>
+            <button onclick="closeModal()" class="px-8 py-2.5 bg-champagne-500 hover:bg-champagne-600 text-white rounded-full text-xs tracking-widest shadow transition-all">
+                關閉視窗
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 微調按鈕數字加減
+        function adjustCount(inputId, delta, minVal) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            let currentVal = parseInt(input.value) || 0;
+            let newVal = currentVal + delta;
+            if (newVal < minVal) newVal = minVal;
+            input.value = newVal;
+        }
+
+        // 切換出席模式邏輯
+        function toggleAttendanceMode(mode) {
+            const relationshipBlock = document.getElementById('relationshipBlock');
+            const contactBlock = document.getElementById('contactBlock');
+            const attendanceDetailsBlock = document.getElementById('attendanceDetailsBlock');
+            const invitationBlock = document.getElementById('invitationBlock');
+            const blessingBlock = document.getElementById('blessingBlock');
+            
+            const relationshipSelect = document.getElementById('entry_383311355');
+            const phoneInput = document.getElementById('entry_1185979561');
+            const invitationRadios = document.querySelectorAll('input[name="entry.471589357"]');
+            const blessingArea = document.getElementById('entry_380847305');
+            const blessingLabel = document.getElementById('blessingLabel');
+
+            blessingBlock.style.display = 'block';
+
+            if (mode === 'attend') {
+                relationshipBlock.style.display = 'block';
+                contactBlock.style.display = 'grid';
+                attendanceDetailsBlock.style.display = 'grid';
+                invitationBlock.style.display = 'block';
+
+                relationshipSelect.required = true;
+                phoneInput.required = true;
+                invitationRadios.forEach(r => r.required = true);
+
+                blessingLabel.innerText = '寄送地址 / 給新人的祝福與備註';
+                blessingArea.placeholder = '若需要紙本喜帖請附上郵遞區號與地址，也歡迎寫下給我們的祝福...';
+            } else if (mode === 'absent') {
+                relationshipBlock.style.display = 'none';
+                contactBlock.style.display = 'none';
+                attendanceDetailsBlock.style.display = 'none';
+                invitationBlock.style.display = 'none';
+
+                relationshipSelect.required = false;
+                phoneInput.required = false;
+                invitationRadios.forEach(r => r.required = false);
+
+                blessingLabel.innerText = '給新人的祝福與留言（選填）';
+                blessingArea.placeholder = '請寫下給我們的祝福...';
+            }
+        }
+
+        let isSubmitted = false;
+
+        function handleFormSubmit(event) {
+            isSubmitted = true;
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const submitBtn = document.getElementById('submitBtn');
+
+            btnText.innerText = '傳送中...';
+            btnSpinner.classList.remove('hidden');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80');
+        }
+
+        function handleIframeLoad() {
+            if (isSubmitted) {
+                const btnText = document.getElementById('btnText');
+                const btnSpinner = document.getElementById('btnSpinner');
+                const submitBtn = document.getElementById('submitBtn');
+
+                btnText.innerText = '確認送出資料';
+                btnSpinner.classList.add('hidden');
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-80');
+
+                showModal();
+
+                document.getElementById('weddingRsvpForm').reset();
+
+                ['relationshipBlock', 'contactBlock', 'attendanceDetailsBlock', 'invitationBlock', 'blessingBlock'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
+                });
+
+                isSubmitted = false;
+            }
+        }
+
+        function showModal() {
+            const modal = document.getElementById('successModal');
+            const content = document.getElementById('modalContent');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('successModal');
+            const content = document.getElementById('modalContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
+</body>
+</html>

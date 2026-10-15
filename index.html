@@ -180,7 +180,7 @@
                 <div id="contactBlock" class="grid grid-cols-1 md:grid-cols-2 gap-6" style="display: none;">
                     <div>
                         <label class="block text-sm font-medium text-darkburgundy mb-2">
-                            聯絡電話 <span id="req_phone" class="text-rosegold-500">*</span>
+                            聯絡電話
                         </label>
                         <input type="tel" 
                                id="entry_1185979561"
@@ -190,7 +190,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-darkburgundy mb-2">
-                            電子信箱
+                            電子信箱 <span id="req_email" class="text-rosegold-500">*</span>
                         </label>
                         <input type="email" 
                                id="entry_1819218719"
@@ -299,7 +299,7 @@
                     <label class="block text-sm font-medium text-darkburgundy mb-2" id="blessingLabel">
                         寄送地址 / 給新人的祝福與備註
                     </label>
-                    <textarea id="entry_380847305"
+                    <textarea id="entry_380847305" 
                               name="entry.380847305" 
                               rows="3" 
                               placeholder="若需要紙本喜帖請附上郵遞區號與地址，也歡迎寫下給我們的祝福..." 
@@ -355,6 +355,7 @@
             const blessingBlock = document.getElementById('blessingBlock');
             
             const relationshipSelect = document.getElementById('entry_383311355');
+            const emailInput = document.getElementById('entry_1819218719');
             const phoneInput = document.getElementById('entry_1185979561');
             const invitationRadios = document.querySelectorAll('input[name="entry.471589357"]');
             const blessingArea = document.getElementById('entry_380847305');
@@ -369,7 +370,8 @@
                 invitationBlock.style.display = 'block';
 
                 relationshipSelect.required = true;
-                phoneInput.required = true;
+                emailInput.required = true;
+                phoneInput.required = false;
                 invitationRadios.forEach(r => r.required = true);
 
                 blessingLabel.innerText = '寄送地址 / 給新人的祝福與備註';
@@ -381,6 +383,7 @@
                 invitationBlock.style.display = 'none';
 
                 relationshipSelect.required = false;
+                emailInput.required = false;
                 phoneInput.required = false;
                 invitationRadios.forEach(r => r.required = false);
 

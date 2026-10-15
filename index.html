@@ -176,7 +176,7 @@
                     </select>
                 </div>
 
-                <!-- 4. 電話 & 5. Email (點選出席才展開) -->
+                <!-- 4. 電話 & 5. Email (均為選填) -->
                 <div id="contactBlock" class="grid grid-cols-1 md:grid-cols-2 gap-6" style="display: none;">
                     <div>
                         <label class="block text-sm font-medium text-darkburgundy mb-2">
@@ -190,7 +190,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-darkburgundy mb-2">
-                            電子信箱 <span id="req_email" class="text-rosegold-500">*</span>
+                            電子信箱
                         </label>
                         <input type="email" 
                                id="entry_1819218719"
@@ -370,7 +370,7 @@
                 invitationBlock.style.display = 'block';
 
                 relationshipSelect.required = true;
-                emailInput.required = true;
+                emailInput.required = false;
                 phoneInput.required = false;
                 invitationRadios.forEach(r => r.required = true);
 
